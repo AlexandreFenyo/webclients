@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		5D68DEAB2BEE511C00763902 /* StaticCredentials-template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */; };
 		5DEA72D72BEE4F8900FF3045 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEA72D62BEE4F8900FF3045 /* Main.swift */; };
-		5DEA72DE2BEE4FCE00FF3045 /* StaticCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEA72DD2BEE4FCE00FF3045 /* StaticCredentials.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,7 +27,6 @@
 		5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StaticCredentials-template.swift"; sourceTree = "<group>"; };
 		5DEA72D32BEE4F8900FF3045 /* webclients */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = webclients; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEA72D62BEE4F8900FF3045 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
-		5DEA72DD2BEE4FCE00FF3045 /* StaticCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticCredentials.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +60,6 @@
 			isa = PBXGroup;
 			children = (
 				5DEA72D62BEE4F8900FF3045 /* Main.swift */,
-				5DEA72DD2BEE4FCE00FF3045 /* StaticCredentials.swift */,
 				5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */,
 			);
 			path = webclients;
@@ -127,7 +124,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D68DEAB2BEE511C00763902 /* StaticCredentials-template.swift in Sources */,
-				5DEA72DE2BEE4FCE00FF3045 /* StaticCredentials.swift in Sources */,
 				5DEA72D72BEE4F8900FF3045 /* Main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
