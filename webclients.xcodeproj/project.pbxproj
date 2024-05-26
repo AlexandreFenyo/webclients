@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D3594C22C03C1EE00D786CC /* WebClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D3594C12C03C1EE00D786CC /* WebClient.swift */; };
 		5D68DEAB2BEE511C00763902 /* StaticCredentials-template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */; };
 		5D68DEAD2BEE532000763902 /* StaticCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D68DEAC2BEE532000763902 /* StaticCredentials.swift */; };
 		5DEA72D72BEE4F8900FF3045 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEA72D62BEE4F8900FF3045 /* Main.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5D3594C12C03C1EE00D786CC /* WebClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebClient.swift; sourceTree = "<group>"; };
 		5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StaticCredentials-template.swift"; sourceTree = "<group>"; };
 		5D68DEAC2BEE532000763902 /* StaticCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticCredentials.swift; sourceTree = "<group>"; };
 		5DEA72D32BEE4F8900FF3045 /* webclients */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = webclients; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,6 +66,7 @@
 				5DEA72D62BEE4F8900FF3045 /* Main.swift */,
 				5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */,
 				5D68DEAC2BEE532000763902 /* StaticCredentials.swift */,
+				5D3594C12C03C1EE00D786CC /* WebClient.swift */,
 			);
 			path = webclients;
 			sourceTree = "<group>";
@@ -129,6 +132,7 @@
 				5D68DEAD2BEE532000763902 /* StaticCredentials.swift in Sources */,
 				5D68DEAB2BEE511C00763902 /* StaticCredentials-template.swift in Sources */,
 				5DEA72D72BEE4F8900FF3045 /* Main.swift in Sources */,
+				5D3594C22C03C1EE00D786CC /* WebClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
