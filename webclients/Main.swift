@@ -13,6 +13,8 @@ var is_apple_env = false
 var is_apple_env = true
 #endif
 
+import ArgumentParser
+
 // TDL :
 // proxy
 // fonctionnement async sur Windows/Linux
@@ -168,10 +170,27 @@ class MyDemo2: NSObject, URLSessionDelegate {
 }
 
 @main
+struct MyCommand: ParsableCommand {
+    @Argument(help: "The phrase to repeat.")
+       var phrase: String = "toto"
+
+       @Option(help: "The number of times to repeat 'phrase'.")
+       var count: Int? = nil
+    
+    mutating func run() throws {
+        let repeatCount = count ?? 2
+        for _ in 0..<repeatCount {
+            print(phrase)
+        }
+    }
+}
+
+//@main
 class MyApp {
     static func main() async throws {
         print("XXXXX: is_apple_env = \(is_apple_env)")
-        try await demo5()
+        
+//        try await demo5()
     }
 
     // Auth, ignore TLS certificate, proxy

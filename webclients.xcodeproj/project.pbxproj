@@ -10,6 +10,7 @@
 		5D3594C22C03C1EE00D786CC /* WebClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D3594C12C03C1EE00D786CC /* WebClient.swift */; };
 		5D68DEAB2BEE511C00763902 /* StaticCredentials-template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */; };
 		5D68DEAD2BEE532000763902 /* StaticCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D68DEAC2BEE532000763902 /* StaticCredentials.swift */; };
+		5DC2608E2C358A210020D769 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 5DC2608D2C358A210020D769 /* ArgumentParser */; };
 		5DEA72D72BEE4F8900FF3045 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEA72D62BEE4F8900FF3045 /* Main.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DC2608E2C358A210020D769 /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +89,9 @@
 			dependencies = (
 			);
 			name = webclients;
+			packageProductDependencies = (
+				5DC2608D2C358A210020D769 /* ArgumentParser */,
+			);
 			productName = webclients;
 			productReference = 5DEA72D32BEE4F8900FF3045 /* webclients */;
 			productType = "com.apple.product-type.tool";
@@ -115,6 +120,9 @@
 				Base,
 			);
 			mainGroup = 5DEA72CA2BEE4F8900FF3045;
+			packageReferences = (
+				5DC2608C2C358A210020D769 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+			);
 			productRefGroup = 5DEA72D42BEE4F8900FF3045 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -301,6 +309,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5DC2608C2C358A210020D769 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5DC2608D2C358A210020D769 /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DC2608C2C358A210020D769 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5DEA72CB2BEE4F8900FF3045 /* Project object */;
 }

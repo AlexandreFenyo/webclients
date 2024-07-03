@@ -5,6 +5,8 @@
 //  Created by Alexandre Fenyo on 26/05/2024.
 //
 
+// Saving this CLI into a binary file: Product / Archive
+
 import Foundation
 
 enum WebClientError: Error {
