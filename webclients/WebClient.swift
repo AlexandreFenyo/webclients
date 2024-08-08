@@ -13,7 +13,19 @@ enum WebClientError: Error {
     case generalError
 }
 
-class WebClient {
+// La configuration pour accéder au réseau
+struct WebClientConfig {
+    
+}
+
+// Le serveur cible
+struct WebClientTarget {
+    
+}
+
+
+
+class WebClientSession {
     private var url: URL
     private var ignore_ssl: Bool
     
