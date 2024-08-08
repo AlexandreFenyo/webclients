@@ -30,6 +30,7 @@
 		5D3594C12C03C1EE00D786CC /* WebClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebClient.swift; sourceTree = "<group>"; };
 		5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StaticCredentials-template.swift"; sourceTree = "<group>"; };
 		5D68DEAC2BEE532000763902 /* StaticCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticCredentials.swift; sourceTree = "<group>"; };
+		5DBBAEF82C6586F2002785C3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5DEA72D32BEE4F8900FF3045 /* webclients */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = webclients; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEA72D62BEE4F8900FF3045 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -49,6 +50,7 @@
 		5DEA72CA2BEE4F8900FF3045 = {
 			isa = PBXGroup;
 			children = (
+				5DBBAEF82C6586F2002785C3 /* README.md */,
 				5DEA72D52BEE4F8900FF3045 /* webclients */,
 				5DEA72D42BEE4F8900FF3045 /* Products */,
 			);
@@ -200,7 +202,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -257,7 +259,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
