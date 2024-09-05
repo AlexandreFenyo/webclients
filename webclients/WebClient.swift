@@ -30,7 +30,6 @@ class WebClientSession {
     private var ignore_ssl: Bool
     
     init(url: String, ignore_ssl: Bool = true, proxy_host: String? = nil, proxy_port: UInt16? = nil) throws {
-        
         guard let _url = URL(string: url) else {
             throw WebClientError.generalError
         }

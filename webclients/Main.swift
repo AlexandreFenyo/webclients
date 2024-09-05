@@ -46,7 +46,7 @@ struct Webclients: ParsableCommand {
     @Option(name: [.customShort("U"), .customLong("proxy-user")], help: "Specify the user name and password to use for proxy authentication (user:password).")
     var opt_proxy_cred: String? = nil
 
-    
+    // -v, --verbose
     @Flag(name: .shortAndLong, help: "Print debugging informations.")
     var verbose = false
 
@@ -54,13 +54,39 @@ struct Webclients: ParsableCommand {
     var url: String
 
     mutating func run() throws {
-        if CommandLine.arguments.count == 1 {
+        // We run here only if the command line parameters are correct according to the package swift-argument-parser
+
+        if verbose {
+            print("output mode: verbose")
+
+            if let opt_proxy {
+                print("using proxy: \(opt_proxy)")
+                // [protocol://]host[:port]
+                let regex = /(https?:\/\/)?[^:\/]+(:[0-9]+)?/
+                guard let foo = try regex.wholeMatch(in: opt_proxy) else {
+                    print("Error: invalid proxy")
+                    Webclients.exit(withError: 1 as! Error)
+                    // CONTINUER ICI
+                }
+                print(foo)
+                print("ICI")
+            } else {
+                print("direct connection (no proxy)")
+            }
+        
+        }
+        
+        return ;
+        
+        print("SALUT2")
+//        if CommandLine.arguments.count == 1 {
             let exec_name = CommandLine.arguments[0]
             print("""
             XXXUsage: \(exec_name) [options...] <url>
             \(exec_name): try '\(exec_name) --help' or '\(exec_name) -h' for more information
             """)
             return
-        }
+  //      }*/
+        
     }
 }
