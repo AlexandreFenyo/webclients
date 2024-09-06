@@ -23,6 +23,7 @@ struct WebClientConfig {
     let is_use_proxy: Bool
     let proxy_host: String?
     let proxy_port: Int?
+    let is_check_ssl: Bool
 }
 
 // Target web server
