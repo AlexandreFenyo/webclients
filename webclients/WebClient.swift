@@ -40,17 +40,15 @@ struct WebClientTarget {
     let path: String?
 }
 
-class WebClientSession {
-    private var url: URL
-    private var ignore_ssl: Bool
-    
-    init(url: String, ignore_ssl: Bool = true, proxy_host: String? = nil, proxy_port: UInt16? = nil) throws {
-        guard let _url = URL(string: url) else {
-            throw WebClientError(kind: .generalError)
-        }
-        self.url = _url
-        self.ignore_ssl = ignore_ssl
+final class WebClientSession: Sendable {
+    private let config: WebClientConfig
+
+    init(config: WebClientConfig) throws {
+        self.config = config
     }
     
-    // CONTINUER ici pour sauvegarder proxy_host et proxy_port ou les traiter directement dans init
-}
+    func doGet() throws -> String {
+
+        return ""
+    }
+ }

@@ -61,14 +61,14 @@ struct Webclients: ParsableCommand {
         var proxy_login: String?
         var proxy_password: String?
         var proxy_host: String?
-        var proxy_port: Int = 80
+        var proxy_port = 3128
         
         if let opt_proxy {
             is_use_proxy = true
             // format: [protocol://]host[:port]
             let regex = /(?<protocol>https?:\/\/)?(?<host>[^:\/]+)(?<port>:[0-9]+)?/
             guard let match = try regex.wholeMatch(in: opt_proxy) else {
-                Self.exit(withError: WebClientError(kind: .generalError, reason: "invalid proxy"))
+                throw WebClientError(kind: .generalError, reason: "invalid proxy")
             }
             
             is_proxy_ssl = match.protocol == "https://"
@@ -78,7 +78,11 @@ struct Webclients: ParsableCommand {
             if let port = match.port {
                 proxy_port = Int(String(port[port.index(after: port.startIndex)...]))!
             }
-            
+
+            if (1...65535).contains(proxy_port) == false {
+                throw WebClientError(kind: .generalError, reason: "invalid proxy port")
+            }
+
             if verbose {
                 print("proxy host: \(proxy_host ?? "")")
                 print("proxy port: \(proxy_port)")
@@ -88,11 +92,7 @@ struct Webclients: ParsableCommand {
                 print("direct connection (no proxy)")
             }
         }
-        
-        if proxy_port != 80 {
-            Self.exit(withError: WebClientError(kind: .generalError, reason: "invalid proxy port"))
-        }
-
+ 
         // format: username:password
         if let opt_proxy_cred {
             if is_use_proxy == false {
@@ -117,13 +117,13 @@ struct Webclients: ParsableCommand {
         var login: String?
         var password: String?
         var host: String
-        var port: Int = 80
+        var port = 80
         var path: String?
         
         // format: [protocol://]host[:port][/path]
         let regex = /(?<protocol>https?:\/\/)(?<host>[^:\/]+)(?<port>:[0-9]+)?(?<path>\/.*)?/
         guard let match = try regex.wholeMatch(in: url) else {
-            Self.exit(withError: WebClientError(kind: .generalError, reason: "invalid URL"))
+            throw WebClientError(kind: .generalError, reason: "invalid URL")
         }
         
         is_ssl = match.protocol == "https://"
@@ -141,6 +141,9 @@ struct Webclients: ParsableCommand {
         } else {
             port = is_ssl ? 443 : 80
         }
+        if (1...65535).contains(proxy_port) == false {
+            throw WebClientError(kind: .generalError, reason: "invalid proxy port")
+        }
         if verbose {
             print("remote port: \(port)")
         }
@@ -156,7 +159,7 @@ struct Webclients: ParsableCommand {
         if let opt_cred {
             let regex_auth = /(?<username>[^:]*)?:(?<password>[^:]*)?/
             guard let match = try regex_auth.wholeMatch(in: opt_cred) else {
-                Self.exit(withError: WebClientError(kind: .generalError, reason: "invalid server credentials"))
+                    throw WebClientError(kind: .generalError, reason: "invalid server credentials")
             }
             login = String(match.username ?? "")
             password = String(match.password ?? "")
@@ -168,7 +171,12 @@ struct Webclients: ParsableCommand {
 
         let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path)
 
+        let session = try WebClientSession(config: client_config)
         
-
+        /*
+        Task {
+            try await Task.sleep(nanoseconds: 1000000000)
+        }
+         */
     }
 }
