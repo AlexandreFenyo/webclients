@@ -34,7 +34,7 @@ struct Webclients: ParsableCommand {
     @Flag(name: [.customShort("k"), .customLong("insecure")], help: "By default, every secure connection curl makes is verified to be secure before the transfer takes place. This option makes curl skip the verification step and proceed without checking.")
     var opt_insecure: Bool = false
     
-    // -u, --user name:password
+    // -u, --user <name:password>
     @Option(name: [.customShort("u"), .customLong("user")], help: "Specify the user name and password to use for server authentication (user:password).")
     var opt_cred: String? = nil
     
@@ -58,6 +58,8 @@ struct Webclients: ParsableCommand {
         
         var is_proxy_ssl = false
         var is_use_proxy = false
+        var proxy_login: String?
+        var proxy_password: String?
         var proxy_host: String?
         var proxy_port: Int = 80
         
@@ -90,12 +92,28 @@ struct Webclients: ParsableCommand {
         if proxy_port != 80 {
             Self.exit(withError: WebClientError(kind: .generalError, reason: "invalid proxy port"))
         }
-        
-        let client_config = WebClientConfig(is_proxy_ssl: is_proxy_ssl, is_use_proxy: is_use_proxy, proxy_host: proxy_host, proxy_port: proxy_port, is_check_ssl: !opt_insecure)
+
+        // format: username:password
+        if let opt_proxy_cred {
+            if is_use_proxy == false {
+                Self.exit(withError: WebClientError(kind: .generalError, reason: "proxy credentials without proxy"))
+            }
+            
+            let regex_auth = /(?<username>[^:]*)?:(?<password>[^:]*)?/
+            guard let match = try regex_auth.wholeMatch(in: opt_proxy_cred) else {
+                Self.exit(withError: WebClientError(kind: .generalError, reason: "invalid proxy credentials"))
+            }
+            proxy_login = String(match.username ?? "")
+            proxy_password = String(match.password ?? "")
+            if verbose {
+                print("proxy login: \(proxy_login ?? "")")
+                print("proxy password: \(proxy_password ?? "")")
+            }
+        }
+
+        let client_config = WebClientConfig(is_proxy_ssl: is_proxy_ssl, is_use_proxy: is_use_proxy, is_auth: opt_proxy_cred != nil, proxy_login: proxy_login, proxy_password: proxy_password, proxy_host: proxy_host, proxy_port: proxy_port, is_check_ssl: !opt_insecure)
         
         var is_ssl = false
-        var is_check_cert = false
-        var is_auth = false
         var login: String?
         var password: String?
         var host: String
@@ -109,19 +127,48 @@ struct Webclients: ParsableCommand {
         }
         
         is_ssl = match.protocol == "https://"
-        
+        if verbose {
+            print(is_ssl ? "connect to TLS server" : "connect to unencrytped server")
+        }
+
         host = String(match.host)
-        
+        if verbose {
+            print("remote host: \(host)")
+        }
+
         if let _port = match.port {
             port = Int(String(_port[_port.index(after: _port.startIndex)...]))!
+        } else {
+            port = is_ssl ? 443 : 80
         }
-        
+        if verbose {
+            print("remote port: \(port)")
+        }
+
         if let _path = match.path {
             path = String(_path[_path.index(after: _path.startIndex)...])
         }
-        
-        let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path)
-    }
+        if verbose {
+            print("remote path: /\(path ?? "")")
+        }
 
-    
+        // format: username:password
+        if let opt_cred {
+            let regex_auth = /(?<username>[^:]*)?:(?<password>[^:]*)?/
+            guard let match = try regex_auth.wholeMatch(in: opt_cred) else {
+                Self.exit(withError: WebClientError(kind: .generalError, reason: "invalid server credentials"))
+            }
+            login = String(match.username ?? "")
+            password = String(match.password ?? "")
+            if verbose {
+                print("login: \(login ?? "")")
+                print("password: \(password ?? "")")
+            }
+        }
+
+        let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path)
+
+        
+
+    }
 }

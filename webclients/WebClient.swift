@@ -21,6 +21,9 @@ struct WebClientError: Error {
 struct WebClientConfig {
     let is_proxy_ssl: Bool
     let is_use_proxy: Bool
+    let is_auth: Bool
+    let proxy_login: String?
+    let proxy_password: String?
     let proxy_host: String?
     let proxy_port: Int?
     let is_check_ssl: Bool
