@@ -19,10 +19,6 @@ import ArgumentParser
 // proxy
 // fonctionnement async sur Windows/Linux
 
-enum AuthError: Error {
-    case tooManyErrors
-}
-
 // Usage:
 // ./webclients --help
 
@@ -55,38 +51,54 @@ struct Webclients: ParsableCommand {
 
     mutating func run() throws {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
-
+        
         if verbose {
             print("output mode: verbose")
-
-            if let opt_proxy {
-                print("using proxy: \(opt_proxy)")
-                // [protocol://]host[:port]
-                let regex = /(https?:\/\/)?[^:\/]+(:[0-9]+)?/
-                guard let foo = try regex.wholeMatch(in: opt_proxy) else {
-                    print("Error: invalid proxy")
-                    Webclients.exit(withError: 1 as! Error)
-                    // CONTINUER ICI
-                }
-                print(foo)
-                print("ICI")
-            } else {
-                print("direct connection (no proxy)")
-            }
-        
         }
         
-        return ;
+        var is_proxy_ssl: Bool = false
+        var is_use_proxy: Bool = false
+        var proxy_host: String?
+        var proxy_port: Int = 80
+
+        if let opt_proxy {
+            is_use_proxy = true
+            // format: [protocol://]host[:port]
+            let regex = /(?<protocol>https?:\/\/)?(?<host>[^:\/]+)(?<port>:[0-9]+)?/
+            guard let match = try regex.wholeMatch(in: opt_proxy) else {
+                Self.exit(withError: WebClientError(kind: .generalError, reason: "invalid proxy"))
+            }
+            is_proxy_ssl = match.protocol == "https://"
+            proxy_host = String(match.host)
+            if let port = match.port {
+                proxy_port = Int(String(port[port.index(after: port.startIndex)...]))!
+            }
+
+            if verbose {
+                print("proxy host: \(proxy_host ?? "")")
+                print("proxy port: \(proxy_port)")
+            }
+        } else {
+            if verbose {
+                print("direct connection (no proxy)")
+            }
+        }
+
+        if proxy_port != 80 {
+            Self.exit(withError: WebClientError(kind: .generalError, reason: "invalid proxy port"))
+        }
         
-        print("SALUT2")
-//        if CommandLine.arguments.count == 1 {
-            let exec_name = CommandLine.arguments[0]
-            print("""
-            XXXUsage: \(exec_name) [options...] <url>
-            \(exec_name): try '\(exec_name) --help' or '\(exec_name) -h' for more information
-            """)
-            return
-  //      }*/
+        let web_client_config = WebClientConfig(is_proxy_ssl: is_proxy_ssl, is_use_proxy: is_use_proxy, proxy_host: proxy_host, proxy_port: proxy_port)
+
+        var is_ssl: Bool = false
+        var is_auth: Bool = false
+        var login: String?
+        var password: String?
+        var host: String
+        var path: String?
+
+        // format: [protocol://]host[:port][/path]
+        let regex = /(?<protocol>https?:\/\/)?(?<host>[^:\/]+)(?<port>:[0-9]+)?(?<path>\/.*)/
         
     }
 }

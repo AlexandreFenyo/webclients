@@ -9,21 +9,32 @@
 
 import Foundation
 
-enum WebClientError: Error {
-    case generalError
+struct WebClientError: Error {
+    enum ErrorKind {
+        case generalError
+    }
+    let kind: ErrorKind
+    var reason: String?
 }
 
-// La configuration pour accéder au réseau
+// Network access config
 struct WebClientConfig {
-    
+    let is_proxy_ssl: Bool
+    let is_use_proxy: Bool
+    let proxy_host: String?
+    let proxy_port: Int?
 }
 
-// Le serveur cible
+// Target web server
 struct WebClientTarget {
-    
+    let is_ssl: Bool
+    let is_auth: Bool
+    let login: String?
+    let password: String?
+    let host: String
+    let port: Int?
+    let path: String?
 }
-
-
 
 class WebClientSession {
     private var url: URL
@@ -31,7 +42,7 @@ class WebClientSession {
     
     init(url: String, ignore_ssl: Bool = true, proxy_host: String? = nil, proxy_port: UInt16? = nil) throws {
         guard let _url = URL(string: url) else {
-            throw WebClientError.generalError
+            throw WebClientError(kind: .generalError)
         }
         self.url = _url
         self.ignore_ssl = ignore_ssl
