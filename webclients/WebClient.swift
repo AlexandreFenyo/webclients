@@ -47,8 +47,7 @@ final class WebClientSession: Sendable {
         self.config = config
     }
     
-    func doGet() throws -> String {
-
+    func doGet(target: WebClientTarget) async throws -> String {
         return ""
     }
  }
