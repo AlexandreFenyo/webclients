@@ -48,6 +48,8 @@ final class WebClientSession: Sendable {
     }
     
     func doGet(target: WebClientTarget) async throws -> String {
+        try await Task.sleep(nanoseconds: 1000000000)
+
         return ""
     }
  }
