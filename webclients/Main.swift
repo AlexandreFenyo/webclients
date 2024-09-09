@@ -45,7 +45,11 @@ struct Webclients: ParsableCommand {
     // -v, --verbose
     @Flag(name: .shortAndLong, help: "Print debugging informations.")
     var verbose = false
-    
+  
+    // -l, --loop <count>
+    @Option(name: [.customShort("l"), .customLong("loop")], help: "Make the request <loop> times.")
+    var opt_loop: Int = 1
+
     @Argument(help: "Target url to retrieve ([protocol://]host[:port][/path]).")
     var url: String
     
@@ -62,6 +66,10 @@ struct Webclients: ParsableCommand {
         var proxy_password: String?
         var proxy_host: String?
         var proxy_port = 3128
+        
+        if opt_loop <= 0 {
+            return
+        }
         
         if let opt_proxy {
             is_use_proxy = true
@@ -173,11 +181,18 @@ struct Webclients: ParsableCommand {
 
         let session = try WebClientSession(config: client_config)
 
-        let sem = DispatchSemaphore(value: 0)
-        Task {
-            try await session.doGet(target: client_target)
-            sem.signal()
+        let sem = DispatchSemaphore(value: 3/*opt_loop - 1*/)
+        
+        (1...opt_loop).forEach { [opt_loop = opt_loop, verbose = verbose] step in
+            Task {
+                if verbose && opt_loop > 1 {
+                    print("launch background task #\(step - 1)")
+                }
+
+                try await session.doGet(target: client_target)
+                sem.signal() // incrément
+            }
         }
-        sem.wait()
+        sem.wait() // décrémente
     }
 }
