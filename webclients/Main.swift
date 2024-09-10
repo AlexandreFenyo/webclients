@@ -24,7 +24,7 @@ import ArgumentParser
 
 @main
 // The struct name is used to create the help by ArgumentParser. With WebClient as the struct name, we would get "USAGE: web-client ..."
-struct Webclients: ParsableCommand {
+struct Webclients: AsyncParsableCommand {
     // -x, --proxy [protocol://]host[:port]
     @Option(name: [.customShort("x"), .customLong("proxy")], help: "Use the specified proxy ([protocol://]host[:port]).")
     var opt_proxy: String? = nil
@@ -53,7 +53,7 @@ struct Webclients: ParsableCommand {
     @Argument(help: "Target url to retrieve ([protocol://]host[:port][/path]).")
     var url: String
     
-    mutating func run() throws {
+    mutating func run() async throws {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
         
         if verbose {
@@ -181,11 +181,6 @@ struct Webclients: ParsableCommand {
 
         let session = try WebClientSession(config: client_config, verbose: verbose)
 
-        let sem = DispatchSemaphore(value: 0)
-        Task { [opt_loop = opt_loop] in
-            try await session.doJobs(target: client_target, count: opt_loop)
-            sem.signal()
-        }
-        sem.wait()
+        try await session.doJobs(target: client_target, count: opt_loop)
     }
 }
