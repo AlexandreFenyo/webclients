@@ -179,11 +179,11 @@ struct Webclients: ParsableCommand {
 
         let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path)
 
-        let session = try WebClientSession(config: client_config)
+        let session = try WebClientSession(config: client_config, verbose: verbose)
 
         let sem = DispatchSemaphore(value: 0)
-        Task { [opt_loop = opt_loop, verbose = verbose] in
-            try await session.doJobs(target: client_target, count: opt_loop, verbose: verbose)
+        Task { [opt_loop = opt_loop] in
+            try await session.doJobs(target: client_target, count: opt_loop)
             sem.signal()
         }
         sem.wait()

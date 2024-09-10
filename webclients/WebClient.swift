@@ -38,24 +38,42 @@ struct WebClientTarget {
     let host: String
     let port: Int?
     let path: String?
+    
+    func getURL() throws -> URL {
+        let url = "http\(is_ssl ? "s" : "")://\(host):\(port ?? 80)/\(path ?? "")"
+        guard let retval = URL(string: url) else {
+            throw WebClientError(kind: .generalError, reason: "invalid URL")
+        }
+        return retval
+    }
 }
 
 final class WebClientSession: Sendable {
     private let config: WebClientConfig
+    private let verbose: Bool
 
-    init(config: WebClientConfig) throws {
+    init(config: WebClientConfig, verbose: Bool = false) throws {
         self.config = config
+        self.verbose = verbose
     }
     
-    func doJobs(target: WebClientTarget, count: Int = 1, verbose: Bool = false) async throws {
+    func doJobs(target: WebClientTarget, count: Int = 1) async throws {
         var tasks: [Task<String, Error>] = []
 
+        let url_session_configuration = URLSessionConfiguration.ephemeral
+        
+        let url_session = URLSession(configuration: url_session_configuration)
+        
         (1...count).forEach { step in
             if verbose {
                 print("launch background task #\(step - 1)")
             }
             let task = Task {
                 try await Task.sleep(nanoseconds: 1000000000)
+                
+                let (data, response) = try await url_session.data(from: target.getURL())
+                print(response)
+                
                 if verbose {
                     print("running task #\(step - 1)")
                 }
