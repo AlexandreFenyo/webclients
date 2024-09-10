@@ -47,9 +47,26 @@ final class WebClientSession: Sendable {
         self.config = config
     }
     
-    func doGet(target: WebClientTarget) async throws -> String {
-        try await Task.sleep(nanoseconds: 1000000000)
+    func doJobs(target: WebClientTarget, count: Int = 1, verbose: Bool = false) async throws {
+        var tasks: [Task<String, Error>] = []
 
-        return ""
+        (1...count).forEach { step in
+            if verbose {
+                print("launch background task #\(step - 1)")
+            }
+            let task = Task {
+                try await Task.sleep(nanoseconds: 1000000000)
+                if verbose {
+                    print("running task #\(step - 1)")
+                }
+                return ""
+            }
+            tasks.append(task)
+        }
+        
+        for task in tasks {
+            let retval = try await task.value
+        }
+
     }
  }

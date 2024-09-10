@@ -181,18 +181,11 @@ struct Webclients: ParsableCommand {
 
         let session = try WebClientSession(config: client_config)
 
-        let sem = DispatchSemaphore(value: 3/*opt_loop - 1*/)
-        
-        (1...opt_loop).forEach { [opt_loop = opt_loop, verbose = verbose] step in
-            Task {
-                if verbose && opt_loop > 1 {
-                    print("launch background task #\(step - 1)")
-                }
-
-                try await session.doGet(target: client_target)
-                sem.signal() // incrément
-            }
+        let sem = DispatchSemaphore(value: 0)
+        Task { [opt_loop = opt_loop, verbose = verbose] in
+            try await session.doJobs(target: client_target, count: opt_loop, verbose: verbose)
+            sem.signal()
         }
-        sem.wait() // décrémente
+        sem.wait()
     }
 }
