@@ -69,7 +69,7 @@ final class WebClientSession: Sendable {
                 print("launch background task #\(step - 1)")
             }
             let task = Task {
-                try await Task.sleep(nanoseconds: 1000000000)
+//                try await Task.sleep(nanoseconds: 1000000000)
                 
                 let (data, response) = try await url_session.data(from: target.getURL())
                 print(response)

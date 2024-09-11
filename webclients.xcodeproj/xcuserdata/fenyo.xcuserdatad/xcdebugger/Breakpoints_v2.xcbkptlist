@@ -3,4 +3,80 @@
    uuid = "A5A93E3C-6120-4750-BCEF-7C9167C4A760"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B98BB80C-5B73-4231-AAD2-2828DFE0855E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "webclients/WebClient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "doJobs(target:count:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B98BB80C-5B73-4231-AAD2-2828DFE0855E - 3073ac773388f35f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; Swift.String in closure #1 (Swift.Int) -&gt; () in webclients.WebClientSession.doJobs(target: webclients.WebClientTarget, count: Swift.Int) async throws -&gt; ()"
+                  moduleName = "webclients"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fenyo/git/webclients/webclients/WebClient.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74">
+               </Location>
+               <Location
+                  uuid = "B98BB80C-5B73-4231-AAD2-2828DFE0855E - fdaaf76ada75037d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for closure #1 @Sendable () async throws -&gt; Swift.String in closure #1 (Swift.Int) -&gt; () in webclients.WebClientSession.doJobs(target: webclients.WebClientTarget, count: Swift.Int) async throws -&gt; ()"
+                  moduleName = "webclients"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fenyo/git/webclients/webclients/WebClient.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74">
+               </Location>
+               <Location
+                  uuid = "B98BB80C-5B73-4231-AAD2-2828DFE0855E - a045977c8383a75d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #1 @Sendable () async throws -&gt; Swift.String in closure #1 (Swift.Int) -&gt; () in webclients.WebClientSession.doJobs(target: webclients.WebClientTarget, count: Swift.Int) async throws -&gt; ()"
+                  moduleName = "webclients"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fenyo/git/webclients/webclients/WebClient.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74">
+               </Location>
+               <Location
+                  uuid = "B98BB80C-5B73-4231-AAD2-2828DFE0855E - 9bb08a064b9e0142"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for closure #1 @Sendable () async throws -&gt; Swift.String in closure #1 (Swift.Int) -&gt; () in webclients.WebClientSession.doJobs(target: webclients.WebClientTarget, count: Swift.Int) async throws -&gt; ()"
+                  moduleName = "webclients"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fenyo/git/webclients/webclients/WebClient.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
