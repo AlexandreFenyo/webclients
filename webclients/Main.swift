@@ -51,10 +51,17 @@ struct Webclients: AsyncParsableCommand {
     var opt_loop: Int = 1
 
     @Argument(help: "Target url to retrieve ([protocol://]host[:port][/path]).")
-    var url: String
+    // non debug inside Xcode:
+    // var url: String
+    // debug inside Xcode:
+    var url: String = "debug"
     
     mutating func run() async throws {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
+        
+        if url == "debug" {
+            url = "https://www.fenyo.net"
+        }
         
         if verbose {
             print("output mode: verbose")

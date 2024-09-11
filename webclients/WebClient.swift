@@ -48,7 +48,7 @@ struct WebClientTarget {
     }
 }
 
-final class WebClientSession: Sendable {
+final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
     private let config: WebClientConfig
     private let verbose: Bool
 
@@ -57,19 +57,28 @@ final class WebClientSession: Sendable {
         self.verbose = verbose
     }
     
+    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        if config.is_check_ssl == false {
+            let urlCredential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
+            completionHandler(.useCredential, urlCredential)
+        } else {
+            completionHandler(.performDefaultHandling, .none)
+        }
+    }
+    
     func doJobs(target: WebClientTarget, count: Int = 1) async throws {
         var tasks: [Task<String, Error>] = []
 
         let url_session_configuration = URLSessionConfiguration.ephemeral
         
-        let url_session = URLSession(configuration: url_session_configuration)
+        let url_session = URLSession(configuration: url_session_configuration, delegate: self, delegateQueue: nil)
         
         (1...count).forEach { step in
             if verbose {
                 print("launch background task #\(step - 1)")
             }
             let task = Task {
-                try await Task.sleep(nanoseconds: 1000000000)
+//                try await Task.sleep(nanoseconds: 1000000000)
                 
                 let (data, response) = try await url_session.data(from: target.getURL())
                 print(response)
