@@ -52,7 +52,7 @@ struct Webclients: AsyncParsableCommand {
 
     @Argument(help: "Target url to retrieve ([protocol://]host[:port][/path]).")
     // non debug inside Xcode:
-    // var url: String
+//    var url: String
     // debug inside Xcode:
     var url: String = "debug"
     
@@ -60,7 +60,8 @@ struct Webclients: AsyncParsableCommand {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
         
         if url == "debug" {
-            url = "https://www.fenyo.net"
+            url = "https://www.fenyo.net/newweb/cplus/"
+            opt_insecure = true
         }
         
         if verbose {
