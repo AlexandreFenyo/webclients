@@ -94,9 +94,10 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
             }
             let task = Task {
 //                try await Task.sleep(nanoseconds: 1000000000)
-                
-                let (data, response) = try await url_session.data(from: target.getURL())
-                print(response)
+
+//                let (data, response) = try await url_session.data(from: target.getURL())
+                CONTINUER ICI
+                try url_session.dataTask(with: target.getURL())
                 
                 if verbose {
                     print("running task #\(step - 1)")
