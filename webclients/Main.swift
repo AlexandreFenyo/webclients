@@ -60,8 +60,8 @@ struct Webclients: AsyncParsableCommand {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
         
         if url == "debug" {
-            url = "http://www.fenyo.net/newweb/cplus/"
-            opt_insecure = true
+            url = "http://www.fenyo.net"
+//            opt_insecure = true
         }
         
         if verbose {

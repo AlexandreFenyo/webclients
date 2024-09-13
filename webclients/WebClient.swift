@@ -82,34 +82,42 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
     }
     
     func doJobs(target: WebClientTarget, count: Int = 1) async throws {
-        var tasks: [Task<String, Error>] = []
+        var tasks: [Task<(Data, URLResponse), Error>] = []
 
         let url_session_configuration = URLSessionConfiguration.ephemeral
         
         let url_session = URLSession(configuration: url_session_configuration, delegate: self, delegateQueue: nil)
         
-        (1...count).forEach { step in
-            if verbose {
-                print("launch background task #\(step - 1)")
-            }
-            let task = Task {
+//        (1...count).forEach { step in
+//            if verbose {
+//                print("launch background task #\(step - 1)")
+//           }
+
+//            let task = Task {
 //                try await Task.sleep(nanoseconds: 1000000000)
 
 //                let (data, response) = try await url_session.data(from: target.getURL())
-                CONTINUER ICI
-                try url_session.dataTask(with: target.getURL())
+                
+                try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data, URLResponse), Error>) in {
+                    let data_task = try url_session.dataTask(with: target.getURL()) { data, response, error in
+                        print("COMPLETED")
+                    }
+                    
+                }
+//                data_task.resume()
+                
                 
                 if verbose {
-                    print("running task #\(step - 1)")
+//                    print("running task #\(step - 1)")
                 }
-                return ""
-            }
-            tasks.append(task)
+//                return ""
+//            }
+//            tasks.append(task)
         }
         
-        for task in tasks {
-            let retval = try await task.value
-        }
+//        for task in tasks {
+//            let retval = try await task.value
+//        }
 
     }
  }
