@@ -121,6 +121,8 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
             
 
         }
+        
+        print(foo)
 
         /*
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data, URLResponse), Error>) in
