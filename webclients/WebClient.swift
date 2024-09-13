@@ -97,7 +97,7 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
 //                try await Task.sleep(nanoseconds: 1000000000)
 
 //                let (data, response) = try await url_session.data(from: target.getURL())
-                
+                // Utiliser URLRequest ou analogue plutôt que URL
                 try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data, URLResponse), Error>) in {
                     let data_task = try url_session.dataTask(with: target.getURL()) { data, response, error in
                         print("COMPLETED")
