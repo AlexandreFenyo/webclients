@@ -61,7 +61,8 @@ struct Webclients: AsyncParsableCommand {
         
         if url == "debug" {
             url = "http://www.fenyo.net"
-//            opt_insecure = true
+            opt_insecure = true
+            verbose = true
         }
         
         if verbose {

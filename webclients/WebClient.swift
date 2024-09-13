@@ -81,6 +81,8 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
         }
     }
     
+    typealias DataAndResponse = (Data?, URLResponse?)
+    
     func doJobs(target: WebClientTarget, count: Int = 1) async throws {
         var tasks: [Task<(Data, URLResponse), Error>] = []
 
@@ -98,26 +100,51 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
 
 //                let (data, response) = try await url_session.data(from: target.getURL())
                 // Utiliser URLRequest ou analogue plutôt que URL
-                try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data, URLResponse), Error>) in {
-                    let data_task = try url_session.dataTask(with: target.getURL()) { data, response, error in
-                        print("COMPLETED")
+
+        // https://developer.apple.com/documentation/swift/withcheckedthrowingcontinuation(isolation:function:_:)?changes=_8
+        let foo: DataAndResponse = try await withCheckedThrowingContinuation { continuation in
+            // continuation: CheckedContinuation<String, any Error>
+            do {
+                let url = try target.getURL()
+                
+                let data_task = url_session.dataTask(with: url) { data, response, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: DataAndResponse(data, response))
                     }
-                    
                 }
+                data_task.resume()
+            } catch {
+                continuation.resume(throwing: error)
+            }
+            
+
+        }
+
+        /*
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data, URLResponse), Error>) in
+        
+            let data_task = try url_session.dataTask(with: target.getURL()) { data, response, error in
+                print("COMPLETED")
+            }
+
+        }*/
+        
 //                data_task.resume()
                 
                 
-                if verbose {
+//                if verbose {
 //                    print("running task #\(step - 1)")
-                }
+//                }
 //                return ""
 //            }
 //            tasks.append(task)
-        }
-        
+    }
+
 //        for task in tasks {
 //            let retval = try await task.value
 //        }
 
-    }
- }
+//    }
+}
