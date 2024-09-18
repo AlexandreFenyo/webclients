@@ -60,7 +60,7 @@ struct Webclients: AsyncParsableCommand {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
         
         if url == "debug" {
-            url = "http://1.2.3.4"
+            url = "http://google.com"
             opt_insecure = true
             verbose = true
             // opt_loop = 5

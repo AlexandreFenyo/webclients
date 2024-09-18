@@ -89,7 +89,10 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
             // continuation: CheckedContinuation<String, any Error>
             do {
                 let url = try target.getURL()
-                let data_task = url_session.dataTask(with: url) { data, response, error in
+                var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 1)
+//                url_request.setValue("iefjzzfe", forHTTPHeaderField: "Host")
+                print("req:\(url_request.allHTTPHeaderFields)")
+                let data_task = url_session.dataTask(with: url_request) { data, response, error in
                     if let error {
                         continuation.resume(throwing: error)
                     } else {
@@ -107,7 +110,6 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
         var tasks: [Task<DataAndResponse, Error>] = []
         
         let url_session_configuration = URLSessionConfiguration.ephemeral
-        url_session_configuration.timeoutIntervalForRequest = 1
         
         let url_session = URLSession(configuration: url_session_configuration, delegate: self, delegateQueue: nil)
         
