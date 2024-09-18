@@ -60,9 +60,10 @@ struct Webclients: AsyncParsableCommand {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
         
         if url == "debug" {
-            url = "http://www.fenyo.net"
+            url = "http://1.2.3.4"
             opt_insecure = true
             verbose = true
+            // opt_loop = 5
         }
         
         if verbose {

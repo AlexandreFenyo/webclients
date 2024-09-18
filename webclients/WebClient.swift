@@ -51,14 +51,13 @@ struct WebClientTarget {
 final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
     private let config: WebClientConfig
     private let verbose: Bool
-
+    
     init(config: WebClientConfig, verbose: Bool = false) throws {
         self.config = config
         self.verbose = verbose
     }
     
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-
         // https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
         switch challenge.protectionSpace.authenticationMethod {
         case NSURLAuthenticationMethodHTTPBasic:
@@ -83,30 +82,13 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
     
     typealias DataAndResponse = (Data?, URLResponse?)
     
-    func doJobs(target: WebClientTarget, count: Int = 1) async throws {
-        var tasks: [Task<(Data, URLResponse), Error>] = []
-
-        let url_session_configuration = URLSessionConfiguration.ephemeral
-        
-        let url_session = URLSession(configuration: url_session_configuration, delegate: self, delegateQueue: nil)
-        
-//        (1...count).forEach { step in
-//            if verbose {
-//                print("launch background task #\(step - 1)")
-//           }
-
-//            let task = Task {
-//                try await Task.sleep(nanoseconds: 1000000000)
-
-//                let (data, response) = try await url_session.data(from: target.getURL())
-                // Utiliser URLRequest ou analogue plutôt que URL
-
-        // https://developer.apple.com/documentation/swift/withcheckedthrowingcontinuation(isolation:function:_:)?changes=_8
-        let foo: DataAndResponse = try await withCheckedThrowingContinuation { continuation in
+    // Utiliser URLRequest ou analogue plutôt que URL
+    // https://developer.apple.com/documentation/swift/withcheckedthrowingcontinuation(isolation:function:_:)?changes=_8
+    func fetch(target: WebClientTarget, url_session: URLSession) async throws -> DataAndResponse {
+        return try await withCheckedThrowingContinuation { continuation in
             // continuation: CheckedContinuation<String, any Error>
             do {
                 let url = try target.getURL()
-                
                 let data_task = url_session.dataTask(with: url) { data, response, error in
                     if let error {
                         continuation.resume(throwing: error)
@@ -118,35 +100,34 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
             } catch {
                 continuation.resume(throwing: error)
             }
-            
-
         }
-        
-        print(foo)
-
-        /*
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data, URLResponse), Error>) in
-        
-            let data_task = try url_session.dataTask(with: target.getURL()) { data, response, error in
-                print("COMPLETED")
-            }
-
-        }*/
-        
-//                data_task.resume()
-                
-                
-//                if verbose {
-//                    print("running task #\(step - 1)")
-//                }
-//                return ""
-//            }
-//            tasks.append(task)
     }
 
-//        for task in tasks {
-//            let retval = try await task.value
-//        }
+    func doJobs(target: WebClientTarget, count: Int = 1) async throws {
+        var tasks: [Task<DataAndResponse, Error>] = []
+        
+        let url_session_configuration = URLSessionConfiguration.ephemeral
+        url_session_configuration.timeoutIntervalForRequest = 1
+        
+        let url_session = URLSession(configuration: url_session_configuration, delegate: self, delegateQueue: nil)
+        
+        if count > 1 {
+            for step in 1...count {
+                if verbose {
+                    print("launch background task #\(step - 1)")
+                }
+                let task = Task {
+                    return try await fetch(target: target, url_session: url_session)
+                }
+                tasks.append(task)
+            }
+        } else {
+            let (data, response) = try await fetch(target: target, url_session: url_session)
+            print("HTTP response: \(response)")
+        }
 
-//    }
+        for task in tasks {
+            let (data, response) = try await task.value
+        }
+    }
 }
