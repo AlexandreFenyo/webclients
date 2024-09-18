@@ -89,7 +89,7 @@ final class WebClientSession: NSObject, URLSessionDelegate, Sendable {
             // continuation: CheckedContinuation<String, any Error>
             do {
                 let url = try target.getURL()
-                var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 1)
+                var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
                 url_request.setValue("deflate", forHTTPHeaderField: "Accept-Encoding")
                 print("req:\(url_request.allHTTPHeaderFields)")
                 let data_task = url_session.dataTask(with: url_request) { data, response, error in
