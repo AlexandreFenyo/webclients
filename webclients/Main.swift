@@ -129,7 +129,7 @@ struct Webclients: AsyncParsableCommand {
             }
         }
 
-        let client_config = WebClientConfig(is_proxy_ssl: is_proxy_ssl, is_use_proxy: is_use_proxy, is_auth: opt_proxy_cred != nil, proxy_login: proxy_login, proxy_password: proxy_password, proxy_host: proxy_host, proxy_port: proxy_port, is_check_ssl: !opt_insecure)
+        let client_config = AccessNetworkConfig(is_proxy_ssl: is_proxy_ssl, is_use_proxy: is_use_proxy, is_auth: opt_proxy_cred != nil, proxy_login: proxy_login, proxy_password: proxy_password, proxy_host: proxy_host, proxy_port: proxy_port, is_check_ssl: !opt_insecure)
         
         var is_ssl = false
         var login: String?
