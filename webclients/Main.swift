@@ -58,12 +58,15 @@ struct Webclients: AsyncParsableCommand {
     
     mutating func run() async throws {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
+  
+        try await example()
+        return;
         
         if url == "debug" {
-            url = "http://1.2.3.4"
+            url = "http://fenyo.net"
             opt_insecure = true
             verbose = true
-            opt_loop = 50
+//            opt_loop = 1
         }
         
         if verbose {

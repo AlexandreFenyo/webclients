@@ -75,6 +75,10 @@ public struct ParsedURL {
             path = "/"
         }
     }
+    
+    func toTarget() -> WebClientTarget {
+        return WebClientTarget(is_ssl: is_ssl, is_auth: is_auth, login: login, password: password, host: host, port: port, path: path)
+    }
 }
 
 // Target web server
@@ -127,14 +131,18 @@ public class WebClientSessionDelegate: NSObject, URLSessionDelegate {
     }
 }
 
+public typealias CredentialsContainer = [String: (String, String)]
+
 public final class WebClientSession: Sendable {
     private let config: AccessNetworkConfig
     private let verbose: Bool
     private let url_session: URLSession
+    private let credentials: CredentialsContainer
     
-    init(config: AccessNetworkConfig, verbose: Bool = false) throws {
+    init(config: AccessNetworkConfig, credentials: CredentialsContainer = CredentialsContainer(), verbose: Bool = false) throws {
         self.config = config
         self.verbose = verbose
+        self.credentials = credentials
         let url_session_configuration = URLSessionConfiguration.ephemeral
         url_session = URLSession(configuration: url_session_configuration, delegate: WebClientSessionDelegate(config: config), delegateQueue: nil)
         }
@@ -166,7 +174,7 @@ public final class WebClientSession: Sendable {
     
     // Utiliser URLRequest ou analogue plutôt que URL
     // https://developer.apple.com/documentation/swift/withcheckedthrowingcontinuation(isolation:function:_:)?changes=_8
-    func fetch(target: WebClientTarget, url_session: URLSession) async throws -> DataAndResponse {
+    func fetch(target: WebClientTarget) async throws -> DataAndResponse {
         return try await withCheckedThrowingContinuation { continuation in
             // continuation: CheckedContinuation<String, any Error>
             do {
@@ -197,12 +205,12 @@ public final class WebClientSession: Sendable {
                     print("launch background task #\(step - 1)")
                 }
                 let task = Task {
-                    return try await fetch(target: target, url_session: url_session)
+                    return try await fetch(target: target)
                 }
                 tasks.append(task)
             }
         } else {
-            let (_, response) = try await fetch(target: target, url_session: url_session)
+            let (_, response) = try await fetch(target: target)
             print("HTTP response: \(String(describing: response))")
         }
 
