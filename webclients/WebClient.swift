@@ -210,7 +210,9 @@ public final class WebClientSession: Sendable {
                 var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
                 url_request.setValue("deflate", forHTTPHeaderField: "Accept-Encoding")
                 print("req:\(String(describing: url_request.allHTTPHeaderFields))")
-                let data_task = url_session.dataTask(with: url_request) { data, response, error in
+//                let data_task = url_session.dataTask(with: url_request) { data, response, error in
+                let data_task = url_session.dataTask(with: url) { data, response, error in
+                    
                     if let error {
                         continuation.resume(throwing: error)
                     } else {
