@@ -61,6 +61,9 @@ struct Webclients: AsyncParsableCommand {
   
 //        try await example()
 //        return;
+
+//        try await MyApp.demo4()
+//        return ;
         
         if url == "debug" {
             url = "http://fenyo.net/newweb/cplus/"

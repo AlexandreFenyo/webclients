@@ -102,14 +102,37 @@ struct WebClientTarget {
     }
 }
 
-public class WebClientSessionDelegate: NSObject, URLSessionDelegate {
+public class WebClientSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     private let config: AccessNetworkConfig
-
+    
     init(config: AccessNetworkConfig) {
         self.config = config
     }
-
+    
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        // https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
+        switch challenge.protectionSpace.authenticationMethod {
+        case NSURLAuthenticationMethodHTTPBasic:
+            let username = StaticCredentials.login
+            let password = StaticCredentials.password
+            let credential = URLCredential(user: username, password: password,
+                                           persistence: .forSession)
+            completionHandler(.useCredential, credential)
+            
+        case NSURLAuthenticationMethodServerTrust:
+            if config.is_check_ssl == false {
+                let urlCredential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
+                completionHandler(.useCredential, urlCredential)
+            } else {
+                completionHandler(.performDefaultHandling, .none)
+            }
+            
+        default:
+            completionHandler(.performDefaultHandling, .none)
+        }
+    }
+    
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         // https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
         switch challenge.protectionSpace.authenticationMethod {
         case NSURLAuthenticationMethodHTTPBasic:
