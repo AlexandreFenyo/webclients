@@ -11,8 +11,7 @@ public struct WebClientError: Error {
 func example() async throws {
     let parsed_url = try ParsedURL("http://fenyo.net/newweb/cplus/")
     let credentials: CredentialsContainer = ["domotique": (StaticCredentials.login, StaticCredentials.password)]
-    
-    let session = try WebClientSession(config: .unsecureDefaultAccessNetwork, credentials: credentials)
+    let session = try WebClientSession(config: AccessNetworkConfig(credentials: credentials), credentials: credentials)
     let (data, response) = try await session.fetch(target: parsed_url.toTarget())
     print(response)
 }

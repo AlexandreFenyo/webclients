@@ -19,11 +19,12 @@ public struct AccessNetworkConfig: Sendable {
     private let proxy_host: String?
     private let proxy_port: Int?
     fileprivate let is_check_ssl: Bool
+    private let credentials: CredentialsContainer
 
     static let defaultAccessNetwork = AccessNetworkConfig()
     static let unsecureDefaultAccessNetwork = AccessNetworkConfig(is_check_ssl: false)
 
-    init(is_proxy_ssl: Bool = false, is_use_proxy: Bool = false, is_auth: Bool = false, proxy_login: String? = nil, proxy_password: String? = nil, proxy_host: String? = nil, proxy_port: Int? = nil, is_check_ssl: Bool = false) {
+    init(is_proxy_ssl: Bool = false, is_use_proxy: Bool = false, is_auth: Bool = false, proxy_login: String? = nil, proxy_password: String? = nil, proxy_host: String? = nil, proxy_port: Int? = nil, is_check_ssl: Bool = false, credentials: CredentialsContainer = CredentialsContainer()) {
         self.is_proxy_ssl = is_proxy_ssl
         self.is_use_proxy = is_use_proxy
         self.is_auth = is_auth
@@ -32,6 +33,7 @@ public struct AccessNetworkConfig: Sendable {
         self.proxy_host = proxy_host
         self.proxy_port = proxy_port
         self.is_check_ssl = is_check_ssl
+        self.credentials = credentials
     }
 }
 
@@ -139,14 +141,17 @@ public final class WebClientSession: Sendable {
     private let url_session: URLSession
     private let credentials: CredentialsContainer
     
+    let del: WebClientSessionDelegate
+    
     init(config: AccessNetworkConfig, credentials: CredentialsContainer = CredentialsContainer(), verbose: Bool = false) throws {
         self.config = config
         self.verbose = verbose
         self.credentials = credentials
         let url_session_configuration = URLSessionConfiguration.ephemeral
-        url_session = URLSession(configuration: url_session_configuration, delegate: WebClientSessionDelegate(config: config), delegateQueue: nil)
-        }
-    
+        del = WebClientSessionDelegate(config: config)
+        url_session = URLSession(configuration: url_session_configuration, delegate: del, delegateQueue: nil)
+    }
+
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         // https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
         switch challenge.protectionSpace.authenticationMethod {

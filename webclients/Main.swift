@@ -55,15 +55,15 @@ struct Webclients: AsyncParsableCommand {
 //    var url: String
     // debug inside Xcode:
     var url: String = "debug"
-    
+
     mutating func run() async throws {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
   
-        try await example()
-        return;
+//        try await example()
+//        return;
         
         if url == "debug" {
-            url = "http://fenyo.net"
+            url = "http://fenyo.net/newweb/cplus/"
             opt_insecure = true
             verbose = true
 //            opt_loop = 1
@@ -189,10 +189,13 @@ struct Webclients: AsyncParsableCommand {
                 print("password: \(password ?? "")")
             }
         }
+        
+        let credentials: CredentialsContainer = ["domotique": (StaticCredentials.login, StaticCredentials.password)]
+
 
         let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path)
 
-        let session = try WebClientSession(config: client_config, verbose: verbose)
+        let session = try WebClientSession(config: client_config, credentials: credentials, verbose: verbose)
 
         try await session.doJobs(target: client_target, count: opt_loop)
     }
