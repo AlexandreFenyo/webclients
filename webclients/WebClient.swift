@@ -102,7 +102,8 @@ struct WebClientTarget {
     }
 }
 
-public class WebClientSessionDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
+// https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
+public class WebClientDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     private let config: AccessNetworkConfig
     
     init(config: AccessNetworkConfig) {
@@ -110,15 +111,7 @@ public class WebClientSessionDelegate: NSObject, URLSessionDelegate, URLSessionT
     }
     
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        // https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
         switch challenge.protectionSpace.authenticationMethod {
-        case NSURLAuthenticationMethodHTTPBasic:
-            let username = StaticCredentials.login
-            let password = StaticCredentials.password
-            let credential = URLCredential(user: username, password: password,
-                                           persistence: .forSession)
-            completionHandler(.useCredential, credential)
-            
         case NSURLAuthenticationMethodServerTrust:
             if config.is_check_ssl == false {
                 let urlCredential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
@@ -133,22 +126,15 @@ public class WebClientSessionDelegate: NSObject, URLSessionDelegate, URLSessionT
     }
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        // https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
         switch challenge.protectionSpace.authenticationMethod {
+            CONTINUER ICI : trouver cred selon realm
+            
         case NSURLAuthenticationMethodHTTPBasic:
             let username = StaticCredentials.login
             let password = StaticCredentials.password
             let credential = URLCredential(user: username, password: password,
                                            persistence: .forSession)
             completionHandler(.useCredential, credential)
-            
-        case NSURLAuthenticationMethodServerTrust:
-            if config.is_check_ssl == false {
-                let urlCredential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
-                completionHandler(.useCredential, urlCredential)
-            } else {
-                completionHandler(.performDefaultHandling, .none)
-            }
             
         default:
             completionHandler(.performDefaultHandling, .none)
@@ -164,15 +150,12 @@ public final class WebClientSession: Sendable {
     private let url_session: URLSession
     private let credentials: CredentialsContainer
     
-    let del: WebClientSessionDelegate
-    
     init(config: AccessNetworkConfig, credentials: CredentialsContainer = CredentialsContainer(), verbose: Bool = false) throws {
         self.config = config
         self.verbose = verbose
         self.credentials = credentials
         let url_session_configuration = URLSessionConfiguration.ephemeral
-        del = WebClientSessionDelegate(config: config)
-        url_session = URLSession(configuration: url_session_configuration, delegate: del, delegateQueue: nil)
+        url_session = URLSession(configuration: url_session_configuration, delegate: WebClientDelegate(config: config), delegateQueue: nil)
     }
 
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
@@ -210,9 +193,7 @@ public final class WebClientSession: Sendable {
                 var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
                 url_request.setValue("deflate", forHTTPHeaderField: "Accept-Encoding")
                 print("req:\(String(describing: url_request.allHTTPHeaderFields))")
-//                let data_task = url_session.dataTask(with: url_request) { data, response, error in
-                let data_task = url_session.dataTask(with: url) { data, response, error in
-                    
+                let data_task = url_session.dataTask(with: url_request) { data, response, error in
                     if let error {
                         continuation.resume(throwing: error)
                     } else {

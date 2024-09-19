@@ -66,7 +66,7 @@ struct Webclients: AsyncParsableCommand {
 //        return ;
         
         if url == "debug" {
-            url = "http://fenyo.net/newweb/cplus/"
+            url = "https://fenyo.net/newweb/cplus/"
             opt_insecure = true
             verbose = true
 //            opt_loop = 1
