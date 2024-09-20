@@ -9,7 +9,7 @@ public struct WebClientError: Error {
 }
 
 func example() async throws {
-    let parsed_url = try ParsedURL("http://fenyo.net/")
+    let parsed_url = try ParsedURL("http://fenyo.net/tmp/enc/tst.u8")
     let credentials: CredentialsContainer = ["domotique": (StaticCredentials.login, StaticCredentials.password)]
     let session = try WebClientSession(config: AccessNetworkConfig(credentials: credentials))
     let (data, request, response) = try await session.fetch(target: parsed_url.toTarget())
