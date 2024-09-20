@@ -195,9 +195,7 @@ struct Webclients: AsyncParsableCommand {
         }
         
         let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path)
-
         let session = try WebClientSession(config: client_config, verbose: verbose)
-
         try await session.doJobs(target: client_target, count: opt_loop)
     }
 }
