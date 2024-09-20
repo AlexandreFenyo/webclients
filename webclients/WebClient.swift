@@ -11,6 +11,7 @@ import Foundation
 
 public typealias CredentialsContainer = [String: (String, String)]
 public typealias DataAndResponse = (Data?, URLResponse?)
+public typealias DataRequestResponse = (Data?, URLRequest?, URLResponse?)
 
 // Network access config
 public struct AccessNetworkConfig: Sendable {
@@ -188,7 +189,6 @@ public final class WebClientSession: Sendable {
             // continuation: CheckedContinuation<String, any Error>
             do {
                 let url = try target.getURL()
-                
                 
                 var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: target.timeout != 0 ? target.timeout : 3600)
                 
