@@ -14,6 +14,7 @@
 		5DC2608E2C358A210020D769 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 5DC2608D2C358A210020D769 /* ArgumentParser */; };
 		5DC479B22C9C5D1C000D069A /* PublicInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC479B12C9C5D1C000D069A /* PublicInterface.swift */; };
 		5DEA72D72BEE4F8900FF3045 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEA72D62BEE4F8900FF3045 /* Main.swift */; };
+		5DFB7CF42C9DD5BA0087C2ED /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFB7CF32C9DD5BA0087C2ED /* DataConverter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +38,7 @@
 		5DC479B12C9C5D1C000D069A /* PublicInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicInterface.swift; sourceTree = "<group>"; };
 		5DEA72D32BEE4F8900FF3045 /* webclients */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = webclients; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEA72D62BEE4F8900FF3045 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		5DFB7CF32C9DD5BA0087C2ED /* DataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 				5D3594C12C03C1EE00D786CC /* WebClient.swift */,
 				5DBBAEF92C6588A4002785C3 /* Tests.swift */,
 				5DC479B12C9C5D1C000D069A /* PublicInterface.swift */,
+				5DFB7CF32C9DD5BA0087C2ED /* DataConverter.swift */,
 			);
 			path = webclients;
 			sourceTree = "<group>";
@@ -146,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D68DEAD2BEE532000763902 /* StaticCredentials.swift in Sources */,
+				5DFB7CF42C9DD5BA0087C2ED /* DataConverter.swift in Sources */,
 				5DBBAEFA2C6588A4002785C3 /* Tests.swift in Sources */,
 				5D68DEAB2BEE511C00763902 /* StaticCredentials-template.swift in Sources */,
 				5DEA72D72BEE4F8900FF3045 /* Main.swift in Sources */,
