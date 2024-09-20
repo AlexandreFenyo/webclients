@@ -9,6 +9,9 @@
 
 import Foundation
 
+public typealias CredentialsContainer = [String: (String, String)]
+public typealias DataAndResponse = (Data?, URLResponse?)
+
 // Network access config
 public struct AccessNetworkConfig: Sendable {
     private let is_proxy_ssl: Bool
@@ -19,7 +22,7 @@ public struct AccessNetworkConfig: Sendable {
     private let proxy_host: String?
     private let proxy_port: Int?
     fileprivate let is_check_ssl: Bool
-    private let credentials: CredentialsContainer
+    fileprivate let credentials: CredentialsContainer
 
     static let defaultAccessNetwork = AccessNetworkConfig()
     static let unsecureDefaultAccessNetwork = AccessNetworkConfig(is_check_ssl: false)
@@ -126,12 +129,13 @@ public class WebClientDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
     }
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+ 
         switch challenge.protectionSpace.authenticationMethod {
-            CONTINUER ICI : trouver cred selon realm
-            
         case NSURLAuthenticationMethodHTTPBasic:
-            let username = StaticCredentials.login
-            let password = StaticCredentials.password
+            guard let realm = challenge.protectionSpace.realm, let username = config.credentials[realm]?.0, let password = config.credentials[realm]?.1 else {
+                completionHandler(.performDefaultHandling, .none)
+                break
+            }
             let credential = URLCredential(user: username, password: password,
                                            persistence: .forSession)
             completionHandler(.useCredential, credential)
@@ -142,18 +146,14 @@ public class WebClientDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
     }
 }
 
-public typealias CredentialsContainer = [String: (String, String)]
-
 public final class WebClientSession: Sendable {
     private let config: AccessNetworkConfig
     private let verbose: Bool
     private let url_session: URLSession
-    private let credentials: CredentialsContainer
     
-    init(config: AccessNetworkConfig, credentials: CredentialsContainer = CredentialsContainer(), verbose: Bool = false) throws {
+    init(config: AccessNetworkConfig, verbose: Bool = false) throws {
         self.config = config
         self.verbose = verbose
-        self.credentials = credentials
         let url_session_configuration = URLSessionConfiguration.ephemeral
         url_session = URLSession(configuration: url_session_configuration, delegate: WebClientDelegate(config: config), delegateQueue: nil)
     }
@@ -181,9 +181,6 @@ public final class WebClientSession: Sendable {
         }
     }
     
-    typealias DataAndResponse = (Data?, URLResponse?)
-    
-    // Utiliser URLRequest ou analogue plutôt que URL
     // https://developer.apple.com/documentation/swift/withcheckedthrowingcontinuation(isolation:function:_:)?changes=_8
     func fetch(target: WebClientTarget) async throws -> DataAndResponse {
         return try await withCheckedThrowingContinuation { continuation in

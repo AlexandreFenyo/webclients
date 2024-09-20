@@ -66,7 +66,7 @@ struct Webclients: AsyncParsableCommand {
 //        return ;
         
         if url == "debug" {
-            url = "https://fenyo.net/newweb/cplus/"
+            url = "http://fenyo.net/newweb/cplus/"
             opt_insecure = true
             verbose = true
 //            opt_loop = 1
@@ -135,7 +135,8 @@ struct Webclients: AsyncParsableCommand {
             }
         }
 
-        let client_config = AccessNetworkConfig(is_proxy_ssl: is_proxy_ssl, is_use_proxy: is_use_proxy, is_auth: opt_proxy_cred != nil, proxy_login: proxy_login, proxy_password: proxy_password, proxy_host: proxy_host, proxy_port: proxy_port, is_check_ssl: !opt_insecure)
+        let credentials: CredentialsContainer = ["domotique": (StaticCredentials.login, StaticCredentials.password)]
+        let client_config = AccessNetworkConfig(is_proxy_ssl: is_proxy_ssl, is_use_proxy: is_use_proxy, is_auth: opt_proxy_cred != nil, proxy_login: proxy_login, proxy_password: proxy_password, proxy_host: proxy_host, proxy_port: proxy_port, is_check_ssl: !opt_insecure, credentials: credentials)
         
         var is_ssl = false
         var login: String?
@@ -193,12 +194,9 @@ struct Webclients: AsyncParsableCommand {
             }
         }
         
-        let credentials: CredentialsContainer = ["domotique": (StaticCredentials.login, StaticCredentials.password)]
-
-
         let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path)
 
-        let session = try WebClientSession(config: client_config, credentials: credentials, verbose: verbose)
+        let session = try WebClientSession(config: client_config, verbose: verbose)
 
         try await session.doJobs(target: client_target, count: opt_loop)
     }
