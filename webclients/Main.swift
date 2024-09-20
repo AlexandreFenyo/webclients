@@ -45,7 +45,11 @@ struct Webclients: AsyncParsableCommand {
     // -v, --verbose
     @Flag(name: .shortAndLong, help: "Print debugging informations.")
     var verbose = false
-  
+
+    // -t, --timeout <seconds>
+    @Option(name: [.customShort("t"), .customLong("timeout")], help: "Maximum duration per request.")
+    var opt_timout: TimeInterval = 0
+
     // -l, --loop <count>
     @Option(name: [.customShort("l"), .customLong("loop")], help: "Make the request <loop> times.")
     var opt_loop: Int = 1
@@ -59,8 +63,8 @@ struct Webclients: AsyncParsableCommand {
     mutating func run() async throws {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
   
-//        try await example()
-//        return;
+        try await example()
+        return;
 
 //        try await MyApp.demo4()
 //        return ;
@@ -194,7 +198,7 @@ struct Webclients: AsyncParsableCommand {
             }
         }
         
-        let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path)
+        let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path, timeout: opt_timout)
         let session = try WebClientSession(config: client_config, verbose: verbose)
         try await session.doJobs(target: client_target, count: opt_loop)
     }

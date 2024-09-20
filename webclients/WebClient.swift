@@ -81,8 +81,8 @@ public struct ParsedURL {
         }
     }
     
-    func toTarget() -> WebClientTarget {
-        return WebClientTarget(is_ssl: is_ssl, is_auth: is_auth, login: login, password: password, host: host, port: port, path: path)
+    func toTarget(timeout: TimeInterval = 0) -> WebClientTarget {
+        return WebClientTarget(is_ssl: is_ssl, is_auth: is_auth, login: login, password: password, host: host, port: port, path: path, timeout: timeout)
     }
 }
 
@@ -95,6 +95,7 @@ struct WebClientTarget {
     let host: String
     let port: Int?
     let path: String?
+    let timeout: TimeInterval
     
     func getURL() throws -> URL {
         let url = "http\(is_ssl ? "s" : "")://\(host):\(port ?? 80)/\(path ?? "")"
@@ -187,7 +188,10 @@ public final class WebClientSession: Sendable {
             // continuation: CheckedContinuation<String, any Error>
             do {
                 let url = try target.getURL()
-                var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
+                
+                
+                var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: target.timeout != 0 ? target.timeout : 3600)
+                
                 url_request.setValue("deflate", forHTTPHeaderField: "Accept-Encoding")
                 print("req:\(String(describing: url_request.allHTTPHeaderFields))")
                 let data_task = url_session.dataTask(with: url_request) { data, response, error in
