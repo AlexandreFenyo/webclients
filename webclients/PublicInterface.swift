@@ -12,6 +12,6 @@ func example() async throws {
     let parsed_url = try ParsedURL("http://fenyo.net/newweb/cplus/")
     let credentials: CredentialsContainer = ["domotique": (StaticCredentials.login, StaticCredentials.password)]
     let session = try WebClientSession(config: AccessNetworkConfig(credentials: credentials))
-    let (data, response) = try await session.fetch(target: parsed_url.toTarget())
+    let (data, request, response) = try await session.fetch(target: parsed_url.toTarget())
     print(response)
 }

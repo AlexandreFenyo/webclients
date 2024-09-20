@@ -184,21 +184,20 @@ public final class WebClientSession: Sendable {
     }
     
     // https://developer.apple.com/documentation/swift/withcheckedthrowingcontinuation(isolation:function:_:)?changes=_8
-    func fetch(target: WebClientTarget) async throws -> DataAndResponse {
+    func fetch(target: WebClientTarget) async throws -> DataRequestResponse {
         return try await withCheckedThrowingContinuation { continuation in
             // continuation: CheckedContinuation<String, any Error>
             do {
                 let url = try target.getURL()
                 
                 var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: target.timeout != 0 ? target.timeout : 3600)
-                
                 url_request.setValue("deflate", forHTTPHeaderField: "Accept-Encoding")
                 print("req:\(String(describing: url_request.allHTTPHeaderFields))")
-                let data_task = url_session.dataTask(with: url_request) { data, response, error in
+                let data_task = url_session.dataTask(with: url_request) { [url_request] data, response, error in
                     if let error {
                         continuation.resume(throwing: error)
                     } else {
-                        continuation.resume(returning: DataAndResponse(data, response))
+                        continuation.resume(returning: DataRequestResponse(data, url_request, response))
                     }
                 }
                 data_task.resume()
@@ -209,7 +208,7 @@ public final class WebClientSession: Sendable {
     }
 
     func doJobs(target: WebClientTarget, count: Int = 1) async throws {
-        var tasks: [Task<DataAndResponse, Error>] = []
+        var tasks: [Task<DataRequestResponse, Error>] = []
         
         if count > 1 {
             for step in 1...count {
@@ -222,12 +221,12 @@ public final class WebClientSession: Sendable {
                 tasks.append(task)
             }
         } else {
-            let (_, response) = try await fetch(target: target)
+            let (_, _, response) = try await fetch(target: target)
             print("HTTP response: \(String(describing: response))")
         }
 
         for task in tasks {
-            let (_, _) = try await task.value
+            let (_, _, _) = try await task.value
         }
     }
 }
