@@ -16,12 +16,12 @@ typealias DataRequestResponse = (Data?, URLRequest?, URLResponse?)
 // Network access config
 struct AccessNetworkConfig: Sendable {
     private let is_proxy_ssl: Bool
-    private let is_use_proxy: Bool
+    fileprivate let is_use_proxy: Bool
     private let is_auth: Bool
     private let proxy_login: String?
     private let proxy_password: String?
-    private let proxy_host: String?
-    private let proxy_port: Int?
+    fileprivate let proxy_host: String?
+    fileprivate let proxy_port: Int?
     fileprivate let is_check_ssl: Bool
     fileprivate let credentials: CredentialsContainer
 
@@ -158,6 +158,24 @@ final class WebClientSession: Sendable {
         self.config = config
         self.verbose = verbose
         let url_session_configuration = URLSessionConfiguration.ephemeral
+
+        // Deal with proxy settings
+        var dict = [AnyHashable: Any]()
+
+        if config.is_use_proxy {
+            // For URL starting with http://
+            dict[kCFNetworkProxiesHTTPEnable as String] = 1
+            dict[kCFNetworkProxiesHTTPProxy as String] = config.proxy_host
+            dict[kCFNetworkProxiesHTTPPort as String] = config.proxy_port
+            
+            // For URL starting with https://
+            dict[kCFNetworkProxiesHTTPSEnable as String] = 1
+            dict[kCFStreamPropertyHTTPSProxyHost as String] = config.proxy_host
+            dict[kCFStreamPropertyHTTPSProxyPort as String] = config.proxy_port
+            
+            url_session_configuration.connectionProxyDictionary = dict
+        }
+        
         url_session = URLSession(configuration: url_session_configuration, delegate: WebClientDelegate(config: config), delegateQueue: nil)
     }
 
