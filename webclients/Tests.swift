@@ -19,7 +19,7 @@ import FoundationNetworking
 class MyDemo5: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     var auth_error_cnt = 0
     
-    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         print("XXXXX: didReceive TLS")
         let urlCredential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
         completionHandler(.useCredential, urlCredential)
@@ -74,7 +74,7 @@ class MyDemo5: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
 class MyDemo4: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     var auth_error_cnt = 0
     
-    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         print("XXXXX: didReceive TLS")
         let urlCredential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
         completionHandler(.useCredential, urlCredential)
@@ -144,7 +144,7 @@ class MyDemo3: NSObject, URLSessionTaskDelegate {
 
 // No auth, ignore TLS certificate
 class MyDemo2: NSObject, URLSessionDelegate {
-    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         print("XXXXX: didReceive")
         let urlCredential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
         completionHandler(.useCredential, urlCredential)

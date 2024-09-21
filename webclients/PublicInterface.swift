@@ -1,6 +1,6 @@
 import Foundation
 
-public struct WebClientError: Error {
+struct WebClientError: Error {
     enum ErrorKind {
         case generalError
     }

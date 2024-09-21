@@ -30,7 +30,7 @@ import Foundation
 // HTML4: <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
 // HTML5: <meta charset="Windows-1252">
 
-public struct HTML {
+struct HTML {
     let content: String
 
     static let charsetNameToCharset: [String: String.Encoding] = ["utf-8": String.Encoding.utf8, "ansi": String.Encoding.ascii, "windows-1252": String.Encoding.ascii, "iso-8859-1": String.Encoding.isoLatin1, "iso-8859-2": String.Encoding.isoLatin2]

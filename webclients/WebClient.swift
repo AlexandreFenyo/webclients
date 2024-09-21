@@ -9,12 +9,12 @@
 
 import Foundation
 
-public typealias CredentialsContainer = [String: (String, String)]
-public typealias DataAndResponse = (Data?, URLResponse?)
-public typealias DataRequestResponse = (Data?, URLRequest?, URLResponse?)
+typealias CredentialsContainer = [String: (String, String)]
+typealias DataAndResponse = (Data?, URLResponse?)
+typealias DataRequestResponse = (Data?, URLRequest?, URLResponse?)
 
 // Network access config
-public struct AccessNetworkConfig: Sendable {
+struct AccessNetworkConfig: Sendable {
     private let is_proxy_ssl: Bool
     private let is_use_proxy: Bool
     private let is_auth: Bool
@@ -41,7 +41,7 @@ public struct AccessNetworkConfig: Sendable {
     }
 }
 
-public struct ParsedURL {
+struct ParsedURL {
     private let is_ssl: Bool
     private let is_auth: Bool
     private let login: String?
@@ -108,14 +108,14 @@ struct WebClientTarget {
 }
 
 // https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
-public class WebClientDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
+class WebClientDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     private let config: AccessNetworkConfig
     
     init(config: AccessNetworkConfig) {
         self.config = config
     }
     
-    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         switch challenge.protectionSpace.authenticationMethod {
         case NSURLAuthenticationMethodServerTrust:
             if config.is_check_ssl == false {
@@ -130,7 +130,7 @@ public class WebClientDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
         }
     }
     
-    public func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
  
         switch challenge.protectionSpace.authenticationMethod {
         case NSURLAuthenticationMethodHTTPBasic:
@@ -148,7 +148,7 @@ public class WebClientDelegate: NSObject, URLSessionDelegate, URLSessionTaskDele
     }
 }
 
-public final class WebClientSession: Sendable {
+final class WebClientSession: Sendable {
     private let config: AccessNetworkConfig
     private let verbose: Bool
     private let url_session: URLSession
@@ -160,7 +160,7 @@ public final class WebClientSession: Sendable {
         url_session = URLSession(configuration: url_session_configuration, delegate: WebClientDelegate(config: config), delegateQueue: nil)
     }
 
-    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         // https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
         switch challenge.protectionSpace.authenticationMethod {
         case NSURLAuthenticationMethodHTTPBasic:
