@@ -25,10 +25,11 @@ struct AccessNetworkConfig: Sendable {
     fileprivate let is_check_ssl: Bool
     fileprivate let credentials: CredentialsContainer
 
+    // Pre-initialized values for common cases
     static let defaultAccessNetwork = AccessNetworkConfig()
     static let unsecureDefaultAccessNetwork = AccessNetworkConfig(is_check_ssl: false)
 
-    init(is_proxy_ssl: Bool = false, is_use_proxy: Bool = false, is_auth: Bool = false, proxy_login: String? = nil, proxy_password: String? = nil, proxy_host: String? = nil, proxy_port: Int? = nil, is_check_ssl: Bool = false, credentials: CredentialsContainer = CredentialsContainer()) {
+    init(is_proxy_ssl: Bool = false, is_use_proxy: Bool = false, is_auth: Bool = false, proxy_login: String? = nil, proxy_password: String? = nil, proxy_host: String? = nil, proxy_port: Int? = nil, is_check_ssl: Bool = true, credentials: CredentialsContainer = CredentialsContainer()) {
         self.is_proxy_ssl = is_proxy_ssl
         self.is_use_proxy = is_use_proxy
         self.is_auth = is_auth
@@ -190,9 +191,11 @@ final class WebClientSession: Sendable {
             do {
                 let url = try target.getURL()
                 
-                var url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: target.timeout != 0 ? target.timeout : 3600)
-                url_request.setValue("deflate", forHTTPHeaderField: "Accept-Encoding")
-                print("req:\(String(describing: url_request.allHTTPHeaderFields))")
+                let url_request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: target.timeout != 0 ? target.timeout : 3600)
+
+                // No need to ask for uncompressed content, URLSession will deal with the encoding
+                // url_request.setValue("deflate", forHTTPHeaderField: "Accept-Encoding")
+
                 let data_task = url_session.dataTask(with: url_request) { [url_request] data, response, error in
                     if let error {
                         continuation.resume(throwing: error)
@@ -221,12 +224,14 @@ final class WebClientSession: Sendable {
                 tasks.append(task)
             }
         } else {
-            let (_, _, response) = try await fetch(target: target)
-            print("HTTP response: \(String(describing: response))")
+            let (_, _, _) = try await fetch(target: target)
         }
 
         for task in tasks {
-            let (_, _, _) = try await task.value
+            let (_, _, response) = try await task.value
+            if verbose {
+                print("response from background task: \(String(describing: response))")
+            }
         }
     }
 }

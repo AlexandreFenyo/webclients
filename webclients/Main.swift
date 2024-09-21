@@ -56,18 +56,18 @@ struct Webclients: AsyncParsableCommand {
 
     @Argument(help: "Target url to retrieve ([protocol://]host[:port][/path]).")
     // non debug inside Xcode:
-//    var url: String
+    var url: String
     // debug inside Xcode:
-    var url: String = "debug"
+//    var url: String = "debug"
 
     mutating func run() async throws {
         // We run here only if the command line parameters are correct according to the package swift-argument-parser
   
-        try await example()
-        return;
+//        try await example()
+//        return;
 
 //        try await MyApp.demo4()
-//        return ;
+//        return;
         
         if url == "debug" {
             url = "http://fenyo.net/tmp/enc/tst.u8"
@@ -197,9 +197,27 @@ struct Webclients: AsyncParsableCommand {
                 print("password: \(password ?? "")")
             }
         }
-        
+
         let client_target = WebClientTarget(is_ssl: is_ssl, is_auth: opt_cred != nil, login: login, password: password, host: host, port: port, path: path, timeout: opt_timout)
         let session = try WebClientSession(config: client_config, verbose: verbose)
-        try await session.doJobs(target: client_target, count: opt_loop)
+        if opt_loop != 1 {
+            try await session.doJobs(target: client_target, count: opt_loop)
+            return
+        }
+
+        // No loop starting from here
+
+        let (data, request, response) = try await session.fetch(target: client_target)
+        guard let data, let request, let response else {
+            throw WebClientError(kind: .generalError, reason: "invalid fetch results")
+        }
+
+        if verbose {
+            print("request: \(String(describing: request))")
+            print("response: \(String(describing: response))")
+        }
+        
+        let html = try HTML(data: data, response: response)
+        print(html.content)
     }
 }

@@ -9,13 +9,14 @@ struct WebClientError: Error {
 }
 
 func example() async throws {
-    let parsed_url = try ParsedURL("http://fenyo.net/newweb/cplus/")
+    let parsed_url = try ParsedURL("https://fenyo.net/")
     let credentials: CredentialsContainer = ["domotique": (StaticCredentials.login, StaticCredentials.password)]
-    let session = try WebClientSession(config: AccessNetworkConfig(credentials: credentials))
+    let session = try WebClientSession(config: AccessNetworkConfig(is_check_ssl: false, credentials: credentials))
     let (data, request, response) = try await session.fetch(target: parsed_url.toTarget())
     guard let data, let request, let response else {
         throw WebClientError(kind: .generalError, reason: "invalid fetch results")
     }
     let html = try HTML(data: data, response: response)
+    print(response)
     print(html.content)
 }
