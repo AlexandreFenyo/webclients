@@ -164,8 +164,7 @@ class MyDemo2: NSObject, URLSessionDelegate {
 //@main
 class MyApp {
     static func main() async throws {
-        print("XXXXX: is_apple_env = \(is_apple_env)")
-        
+        // print("XXXXX: is_apple_env = \(is_apple_env)")
         //        try await demo5()
     }
     
