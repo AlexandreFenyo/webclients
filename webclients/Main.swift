@@ -6,13 +6,6 @@
 //
 
 import Foundation
-#if canImport(FoundationNetworking)
-import FoundationNetworking
-var is_apple_env = false
-#else
-var is_apple_env = true
-#endif
-
 import ArgumentParser
 
 // TDL :

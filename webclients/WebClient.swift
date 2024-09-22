@@ -109,7 +109,7 @@ struct WebClientTarget {
 }
 
 // https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication
-class WebClientDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
+final class WebClientDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     private let config: AccessNetworkConfig
     
     init(config: AccessNetworkConfig) {
