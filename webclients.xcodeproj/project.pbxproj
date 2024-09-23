@@ -3,17 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5D3594C22C03C1EE00D786CC /* WebClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D3594C12C03C1EE00D786CC /* WebClient.swift */; };
 		5D68DEAB2BEE511C00763902 /* StaticCredentials-template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */; };
 		5D68DEAD2BEE532000763902 /* StaticCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D68DEAC2BEE532000763902 /* StaticCredentials.swift */; };
 		5DC2608E2C358A210020D769 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 5DC2608D2C358A210020D769 /* ArgumentParser */; };
-		5DC479B22C9C5D1C000D069A /* PublicInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC479B12C9C5D1C000D069A /* PublicInterface.swift */; };
+		5DE00BB42CA09B74009B64AC /* WebClientsPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 5DE00BB32CA09B74009B64AC /* WebClientsPackage */; };
 		5DEA72D72BEE4F8900FF3045 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEA72D62BEE4F8900FF3045 /* Main.swift */; };
-		5DFB7CF42C9DD5BA0087C2ED /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFB7CF32C9DD5BA0087C2ED /* DataConverter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,14 +27,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5D3594C12C03C1EE00D786CC /* WebClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebClient.swift; sourceTree = "<group>"; };
 		5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StaticCredentials-template.swift"; sourceTree = "<group>"; };
 		5D68DEAC2BEE532000763902 /* StaticCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticCredentials.swift; sourceTree = "<group>"; };
 		5DBBAEF82C6586F2002785C3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		5DC479B12C9C5D1C000D069A /* PublicInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicInterface.swift; sourceTree = "<group>"; };
 		5DEA72D32BEE4F8900FF3045 /* webclients */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = webclients; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DEA72D62BEE4F8900FF3045 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
-		5DFB7CF32C9DD5BA0087C2ED /* DataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +40,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DC2608E2C358A210020D769 /* ArgumentParser in Frameworks */,
+				5DE00BB42CA09B74009B64AC /* WebClientsPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,9 +70,6 @@
 				5DEA72D62BEE4F8900FF3045 /* Main.swift */,
 				5D68DEAA2BEE511C00763902 /* StaticCredentials-template.swift */,
 				5D68DEAC2BEE532000763902 /* StaticCredentials.swift */,
-				5D3594C12C03C1EE00D786CC /* WebClient.swift */,
-				5DC479B12C9C5D1C000D069A /* PublicInterface.swift */,
-				5DFB7CF32C9DD5BA0087C2ED /* DataConverter.swift */,
 			);
 			path = webclients;
 			sourceTree = "<group>";
@@ -99,6 +92,7 @@
 			name = webclients;
 			packageProductDependencies = (
 				5DC2608D2C358A210020D769 /* ArgumentParser */,
+				5DE00BB32CA09B74009B64AC /* WebClientsPackage */,
 			);
 			productName = webclients;
 			productReference = 5DEA72D32BEE4F8900FF3045 /* webclients */;
@@ -130,6 +124,7 @@
 			mainGroup = 5DEA72CA2BEE4F8900FF3045;
 			packageReferences = (
 				5DC2608C2C358A210020D769 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+				5DE00BB22CA09B74009B64AC /* XCLocalSwiftPackageReference "../WebClientsPackage" */,
 			);
 			productRefGroup = 5DEA72D42BEE4F8900FF3045 /* Products */;
 			projectDirPath = "";
@@ -146,11 +141,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D68DEAD2BEE532000763902 /* StaticCredentials.swift in Sources */,
-				5DFB7CF42C9DD5BA0087C2ED /* DataConverter.swift in Sources */,
 				5D68DEAB2BEE511C00763902 /* StaticCredentials-template.swift in Sources */,
 				5DEA72D72BEE4F8900FF3045 /* Main.swift in Sources */,
-				5D3594C22C03C1EE00D786CC /* WebClient.swift in Sources */,
-				5DC479B22C9C5D1C000D069A /* PublicInterface.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +316,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		5DE00BB22CA09B74009B64AC /* XCLocalSwiftPackageReference "../WebClientsPackage" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../WebClientsPackage;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		5DC2608C2C358A210020D769 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -340,6 +339,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5DC2608C2C358A210020D769 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
+		};
+		5DE00BB32CA09B74009B64AC /* WebClientsPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WebClientsPackage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
